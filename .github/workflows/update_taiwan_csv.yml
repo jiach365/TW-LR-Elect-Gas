@@ -2,8 +2,8 @@ name: Scrape Taiwan Earnings
 
 on:
   schedule:
-    - cron: '0 0 1 * *'  # Runs every month
-  workflow_dispatch:     # Allows manual trigger from GitHub
+    - cron: '0 0 1 * *'  # Runs on the 1st of every month at 00:00 UTC
+  workflow_dispatch:     # Allows manual run from GitHub UI
 
 jobs:
   run-script:
@@ -26,9 +26,10 @@ jobs:
       - name: Run scraper
         run: python taiwan_no_api.py
 
-      - name: Upload Excel file
-        uses: actions/upload-artifact@v4
-        with:
-          name: Taiwan-Earnings
-          path: Taiwan.xlsx
-
+      - name: Commit and push updated Excel file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Taiwan.xlsx
+          git commit -m "Update Taiwan.xlsx from scraper run" || echo "No changes to commit"
+          git push
