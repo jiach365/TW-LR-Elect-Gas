@@ -27,9 +27,12 @@ jobs:
         run: python taiwan_no_api.py
 
       - name: Commit and push updated Excel file
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add Taiwan.xlsx
           git commit -m "Update Taiwan.xlsx from scraper run" || echo "No changes to commit"
-          git push
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref_name }}
+          
