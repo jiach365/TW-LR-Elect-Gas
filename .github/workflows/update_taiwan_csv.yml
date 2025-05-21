@@ -24,7 +24,7 @@ jobs:
           pip install pandas selenium openpyxl
 
       - name: Run scraper
-        run: python fetch_taiwan_data.py
+        run: python taiwan_no_api.py
 
       - name: Upload Excel file
         uses: actions/upload-artifact@v4
