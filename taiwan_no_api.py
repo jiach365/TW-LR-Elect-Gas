@@ -43,7 +43,16 @@ def run_scraper():
 
     # Select dropdown values
     Select(wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "countYearBegin")))).select_by_value("10401")
-    Select(wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "countYearEnd")))).select_by_value("11403")
+    # Select countYearEnd dynamically (latest)
+    end_dropdown_elem = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "countYearEnd")))
+    end_dropdown = Select(end_dropdown_elem)
+    options = end_dropdown.options
+    if options:
+        last_value = options[-1].get_attribute("value")
+        end_dropdown.select_by_value(last_value)
+        print(f"Selected latest countYearEnd: {last_value}")
+    else:
+        raise Exception("No options found in countYearEnd dropdown!")
     Select(wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "cycleType")))).select_by_value("forMonth")
     Select(wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "cycleValue")))).select_by_value("0")
 
